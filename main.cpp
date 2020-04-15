@@ -12,7 +12,7 @@ void enableRawMode() {
   tcgetattr(STDIN_FILENO, &orig_termios);
   atexit(disableRawMode); // call when the program exists.
   struct termios raw = orig_termios;
-  raw.c_lflag &= ~(ECHO);
+  raw.c_lflag &= ~(ECHO | ICANON); // ICANON will read byte by byte instead of line by line.
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
