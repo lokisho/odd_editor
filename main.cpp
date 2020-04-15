@@ -1,3 +1,5 @@
+#include <cstdio>
+#include <cctype>
 #include <iostream>
 #include <unistd.h>
 #include <termios.h>
@@ -20,7 +22,14 @@ void enableRawMode() {
 int main() {
   enableRawMode();
   char c;
-  while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q');
-  std::cout << "Hello World4!" << "\n";
-  return 0;
+  while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q') {
+   if (std::iscntrl(c)) {
+      std::printf("%d\n", c);
+    } 
+   else {
+      std::printf("%d ('%c')\n", c, c);
+    }
+  }
+  // Testing the byte by byte printing each character.
+   return 0;
 }
