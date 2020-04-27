@@ -16,7 +16,12 @@ void enableRawMode() {
   struct termios raw = orig_termios;
   // IXON Disables ctrl+s y ctrl+q
   // ICRNL outputs ctrl+m to 13. By default, it has a weird behavior that outputs 10
-  raw.c_iflag &= ~(ICRNL | IXON);
+  // When BRKINT is turned on, a break condition will cause a SIGINT - disable in modern emulators.
+  // INPCK enables parity checking - disable in modern emulators
+  // ISTRIP causes the 8th bit of each input byte to be stripped, - disable in modern emulators. 
+  raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+  // It sets the character size (CS) to 8 bits per byte. it could be set that already.
+  raw.c_cflag |= (CS8);
   // Disables \n and \r\n.
   // in our program we’ll have to write out the full "\r\n" whenever we want to start a new line
   // endl won't work.
