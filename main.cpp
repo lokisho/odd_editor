@@ -18,6 +18,8 @@ void enableRawMode() {
   // ICRNL outputs ctrl+m to 13. By default, it has a weird behavior that outputs 10
   raw.c_iflag &= ~(ICRNL | IXON);
   // Disables \n and \r\n.
+  // in our program we’ll have to write out the full "\r\n" whenever we want to start a new line
+  // endl won't work.
   raw.c_oflag &= ~(OPOST);
   // ICANON will read byte by byte instead of line by line.
   // ISIG will turn off ctrl+z y ctrl + c
@@ -33,11 +35,11 @@ int main() {
   while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q') {
    if (std::iscntrl(c)) {
       // std::printf("%d\n", c);
-      std::cout << (int)c << std::endl;
+      std::cout << (int)c << "\r\n";
     } 
    else {
       // std::printf("%d ('%c')\n", c, c);
-      std::cout << (int)c << ' '  << c << std::endl;
+      std::cout << (int)c << ' '  << c << "\r\n";
     }
   }
   // Testing the byte by byte printing each character.
