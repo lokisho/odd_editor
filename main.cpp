@@ -14,8 +14,9 @@ void enableRawMode() {
   tcgetattr(STDIN_FILENO, &orig_termios);
   atexit(disableRawMode); // call when the program exists.
   struct termios raw = orig_termios;
-  // Disables ctrl+s y ctrl+q
-  raw.c_iflag &= ~(IXON);
+  // IXON Disables ctrl+s y ctrl+q
+  // ICRNL outputs ctrl+m to 13. By default, it has a weird behavior that outputs 10
+  raw.c_iflag &= ~(ICRNL | IXON);
   // ICANON will read byte by byte instead of line by line.
   // ISIG will turn off ctrl+z y ctrl + c
   // IEXTEN disables ctrl+v => in terminal that is NOT paste.
