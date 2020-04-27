@@ -17,6 +17,8 @@ void enableRawMode() {
   // IXON Disables ctrl+s y ctrl+q
   // ICRNL outputs ctrl+m to 13. By default, it has a weird behavior that outputs 10
   raw.c_iflag &= ~(ICRNL | IXON);
+  // Disables \n and \r\n.
+  raw.c_oflag &= ~(OPOST);
   // ICANON will read byte by byte instead of line by line.
   // ISIG will turn off ctrl+z y ctrl + c
   // IEXTEN disables ctrl+v => in terminal that is NOT paste.
