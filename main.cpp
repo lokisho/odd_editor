@@ -14,6 +14,8 @@ void enableRawMode() {
   tcgetattr(STDIN_FILENO, &orig_termios);
   atexit(disableRawMode); // call when the program exists.
   struct termios raw = orig_termios;
+  // Disables ctrl+s y ctrl+q
+  raw.c_iflag &= ~(IXON);
   // ICANON will read byte by byte instead of line by line.
   // ISIG will turn off ctrl+z y ctrl + c
   raw.c_lflag &= ~(ECHO | ICANON | ISIG);
