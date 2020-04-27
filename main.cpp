@@ -14,7 +14,9 @@ void enableRawMode() {
   tcgetattr(STDIN_FILENO, &orig_termios);
   atexit(disableRawMode); // call when the program exists.
   struct termios raw = orig_termios;
-  raw.c_lflag &= ~(ECHO | ICANON); // ICANON will read byte by byte instead of line by line.
+  // ICANON will read byte by byte instead of line by line.
+  // ISIG will turn off ctrl+z y ctrl + c
+  raw.c_lflag &= ~(ECHO | ICANON | ISIG);
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
@@ -24,10 +26,12 @@ int main() {
   char c;
   while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q') {
    if (std::iscntrl(c)) {
-      std::printf("%d\n", c);
+      // std::printf("%d\n", c);
+      std::cout << (int)c << std::endl;
     } 
    else {
-      std::printf("%d ('%c')\n", c, c);
+      // std::printf("%d ('%c')\n", c, c);
+      std::cout << (int)c << ' '  << c << std::endl;
     }
   }
   // Testing the byte by byte printing each character.
