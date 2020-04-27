@@ -18,7 +18,8 @@ void enableRawMode() {
   raw.c_iflag &= ~(IXON);
   // ICANON will read byte by byte instead of line by line.
   // ISIG will turn off ctrl+z y ctrl + c
-  raw.c_lflag &= ~(ECHO | ICANON | ISIG);
+  // IEXTEN disables ctrl+v => in terminal that is NOT paste.
+  raw.c_lflag &= ~(ECHO | IEXTEN | ICANON | ISIG);
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
